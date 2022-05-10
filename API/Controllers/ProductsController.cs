@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
-using Infrastructure.Data;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,25 +16,26 @@ namespace API.Controllers
     public class ProductsController : Controller
     {
         private readonly ILogger<ProductsController> _logger;
-        private readonly StoreContext _context;
+        
+        private readonly IProductRepository _repo;
 
-        public ProductsController(ILogger<ProductsController> logger, StoreContext context)
-        {
-            _context = context;
+        public ProductsController(ILogger<ProductsController> logger, IProductRepository repo)
+        {            
+            _repo = repo;
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {   
-            var products = await _context.Products.ToListAsync();
+            var products = await _repo.GetProducts();
             return Ok(products);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            return Ok(await _context.Products.FindAsync(id));
+            return Ok(await _repo.GetProductByIdAsync(id));
         }
 
         public IActionResult Index()
