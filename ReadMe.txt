@@ -7,5 +7,7 @@ E ECommerce Project
 	Repositiy Pattern - generic
 	Migrations and database seeding
 	Specification pattern - improves reposistory
+	AutoMapper, Config - ValueResolver
+	
 
 	
